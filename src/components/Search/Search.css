@@ -1,0 +1,46 @@
+.search-container{
+    border-bottom: 1px solid lightgray;
+}
+
+.search-container input{
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding-left: 5px;
+    outline: none;
+    cursor: pointer;
+    height: 30px;
+}
+.search-container input::placeholder{
+    color: white;
+}
+
+.search-userChat{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.search-userChat:hover{
+    background-color: #2f2d52;
+}
+
+.search-userChat img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.search-chatInfo span{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.search-chatInfo p{
+    font-size: 14px;
+    color: lightgray;
+}

@@ -1,0 +1,7 @@
+.messages-container{
+    background-color: #ddddf7;
+    padding: 10px;
+    height: 64vh;
+    overflow: scroll;
+    overflow-x: hidden;
+}

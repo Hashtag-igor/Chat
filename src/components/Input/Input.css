@@ -1,0 +1,35 @@
+.input-container{
+    height: 50px;
+    background-color: #ffffff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.input-container input{
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+    outline: none;
+    color: #2f2d52;
+}
+.input-container input::placeholder{
+    color: lightgray;
+}
+
+.input-send{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-send button{
+    border: none;
+    padding: 10px 15px;
+    color: white;
+    background-color: #8da4f1;
+    cursor: pointer;
+}
+
