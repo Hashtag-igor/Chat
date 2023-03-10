@@ -1,46 +1,61 @@
 import React from 'react'
 import "./Form.css"
-
-//import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
-
-import { useForm } from "react-hook-form";
-
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { auth, storage } from "../../firebase"
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 export default function Register() {
-    const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm();
+    //const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm();
+    //const [error, setError] = useState(false)
 
-    function getInformation(e){
+    const handleSubmit = async (e) =>{
         e.preventDefault()
-        console.log(e.target[0].value)
+        const fullName = e.target[0].value
+        const email = e.target[1].value
+        const password = e.target[2].value
+        const file = e.target[3].files[0]
+        try{
+            const res = await createUserWithEmailAndPassword(auth, email, password)
+
+            const storageRef = ref(storage, fullName);
+
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            uploadTask.on('state_changed', (error) => {
+                console.log(error)
+            }, () => {
+                getDownloadURL(uploadTask.snapshot.ref)
+                .then(async (downloadURL) => {
+                await updateProfile(res.user,{
+                    fullName,
+                    photoURL: downloadURL,
+                })
+            });
+        })}
+        catch(error){
+            console.log(error)
+            alert("email already in use, try another")
+        }
     }
 
-//     const auth = getAuth();
-//         createUserWithEmailAndPassword(auth, email, password)
-//         .then((userCredential) => {
-//     // Signed in
-//         const user = userCredential.user;
-//     // ...
-//   })
-
     return (
-      <form className='form-container' onSubmit={handleSubmit(getInformation)}>
+      <form className='form-container' onSubmit={handleSubmit}>
           <div className='form-box'>
               <div>
                   <h2>AskApp Chat</h2>
                   <p>Register</p>
               </div>
               <div className='form-piece'>                 
-                  <input className='form-input' type="text" placeholder='Full Name' {...register ("name", {required: true, minLength: 10})}/>
-                  {errors.name && <span>The minimum lenght is 10 and fill out this field is necessary</span>}
+                  <input className='form-input' type="text" placeholder='Full Name' />
+                  {/* {errors.name && <span>The minimum lenght is 10 and fill out this field is necessary</span>} */}
               </div>
               <div className='form-piece'>                 
-                  <input className='form-input' type="email" placeholder='Email' {...register ("email", {required: true, minLength: 10})}/>
-                  {errors.email && <span>The minimum lenght is 10 and fill out this field is necessary</span>}
+                  <input className='form-input' type="email" placeholder='Email' />
+                  {/* {errors.email && <span>The minimum lenght is 10 and fill out this field is necessary</span>} */}
               </div>
               <div className='form-piece'>                 
-                  <input className='form-input' type="password" placeholder='Password' {...register ("password", {required: true, minLength: 6})}/>
-                  {errors.password && <span>The minimum lenght is 6 and fill out this field is necessary</span>}
+                  <input className='form-input' type="password" placeholder='Password' />
+                  {/* {errors.password && <span>The minimum lenght is 6 and fill out this field is necessary</span>} */}
               </div>
               <div className='form-piece'>                 
               <input type="file" style={{display: "none"}} id="file"/>
@@ -50,7 +65,8 @@ export default function Register() {
                 </label>
               </div>
               <div className='form-piece'>
-                  <input className='form-button' type="submit" value="Sign up" disabled={!isDirty && !isValid}/>
+                  <input className='form-button' type="submit" value="Sign up"/>
+                  {/* {error && <span>Something went wrong</span>} */}
               </div>
           </div>
       </form>
